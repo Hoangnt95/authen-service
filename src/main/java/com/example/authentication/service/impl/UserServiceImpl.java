@@ -1,5 +1,7 @@
 package com.example.authentication.service.impl;
 
+import com.example.authentication.common.ErrorCode;
+import com.example.authentication.exception.AppException;
 import com.example.authentication.mapper.UserMapper;
 import com.example.authentication.object.dto.request.UserRequest;
 import com.example.authentication.object.dto.response.BaseResponse;
@@ -19,16 +21,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserRequest request) {
-        User user = userMapper.toUser(request);
-        UserResponse response = userMapper.toUserResponse(userRepository.save(user));
 
-        return BaseResponse.success(response);
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTS);
+        }
+        User user = userMapper.toUser(request);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
     public UserResponse getUserByUserName(String userName) {
-        UserResponse userResponse = userMapper.toUserResponse(userRepository.findUserByUsername(userName));
-
-        return BaseResponse.success(userResponse);
+        return userMapper.toUserResponse(userRepository.findUserByUsername(userName));
     }
 }

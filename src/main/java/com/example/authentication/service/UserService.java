@@ -1,7 +1,6 @@
 package com.example.authentication.service;
 
 import com.example.authentication.object.dto.request.UserRequest;
-import com.example.authentication.object.dto.response.BaseResponse;
 import com.example.authentication.object.dto.response.UserResponse;
 
 public interface UserService {
